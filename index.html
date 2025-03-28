@@ -1,0 +1,337 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ 编程练习系统</title>
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --secondary-color: #34a853;
+            --error-color: #ea4335;
+            --light-gray: #f5f5f5;
+            --dark-gray: #333;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background-color: #f9f9f9;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+        }
+        
+        .problem-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .problem-title {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .test-case {
+            background-color: var(--light-gray);
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-family: monospace;
+        }
+        
+        .editor-section {
+            margin: 25px 0;
+        }
+        
+        #editor {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            resize: none;
+            margin-bottom: 15px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            flex: 1;
+        }
+        
+        .submit-btn:hover {
+            background-color: #3367d6;
+        }
+        
+        .reset-btn {
+            background-color: #f1f1f1;
+            color: var(--dark-gray);
+        }
+        
+        .reset-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .result-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .result-title {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .test-result {
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .test-result.passed {
+            background-color: rgba(52, 168, 83, 0.1);
+            color: var(--secondary-color);
+        }
+        
+        .test-result.failed {
+            background-color: rgba(234, 67, 53, 0.1);
+            color: var(--error-color);
+        }
+        
+        .result-icon {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .summary {
+            margin-top: 15px;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+            border-radius: 4px;
+        }
+        
+        .success-summary {
+            background-color: rgba(52, 168, 83, 0.2);
+            color: var(--secondary-color);
+        }
+        
+        .error-summary {
+            background-color: rgba(234, 67, 53, 0.2);
+            color: var(--error-color);
+        }
+        
+        /* 移动设备适配 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .problem-title {
+                font-size: 1.2rem;
+            }
+            
+            #editor {
+                height: 250px;
+                font-size: 14px;
+                padding: 10px;
+            }
+            
+            button {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #editor {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>C++ 编程练习系统</h1>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="problem-section">
+            <h2 class="problem-title">题目描述</h2>
+            <p id="problem-description">编写一个函数计算两个整数的和</p>
+            
+            <h3 style="margin-top: 20px;">函数签名</h3>
+            <div class="test-case">int addTwoNumbers(int a, int b);</div>
+            
+            <h3 style="margin-top: 20px;">测试用例</h3>
+            <div class="test-case">输入: addTwoNumbers(5, 3)<br>期望输出: 8</div>
+            <div class="test-case">输入: addTwoNumbers(10, 20)<br>期望输出: 30</div>
+            <div class="test-case">输入: addTwoNumbers(-5, 5)<br>期望输出: 0</div>
+        </section>
+        
+        <section class="editor-section">
+            <h2>代码编辑器</h2>
+            <textarea id="editor">#include &lt;iostream&gt;
+using namespace std;
+
+// 请在此处编写你的代码
+int addTwoNumbers(int a, int b) {
+    // 在这里实现函数
+    
+}</textarea>
+            
+            <div class="button-group">
+                <button class="submit-btn" onclick="submitCode()">提交代码</button>
+                <button class="reset-btn" onclick="resetCode()">重置代码</button>
+            </div>
+        </section>
+        
+        <section class="result-section" id="result-section">
+            <h2 class="result-title">测试结果</h2>
+            <div id="test-results"></div>
+            <div class="summary" id="summary"></div>
+        </section>
+    </main>
+
+    <script>
+        // 模拟题目数据
+        const currentProblem = {
+            description: "编写一个函数计算两个整数的和",
+            functionName: "addTwoNumbers",
+            testCases: [
+                { input: "5, 3", output: "8" },
+                { input: "10, 20", output: "30" },
+                { input: "-5, 5", output: "0" }
+            ]
+        };
+        
+        // 提交代码
+        function submitCode() {
+            const code = document.getElementById('editor').value;
+            const resultSection = document.getElementById('result-section');
+            const testResultsContainer = document.getElementById('test-results');
+            const summaryContainer = document.getElementById('summary');
+            
+            // 显示加载状态
+            resultSection.style.display = 'block';
+            testResultsContainer.innerHTML = '<p>正在测试您的代码...</p>';
+            summaryContainer.innerHTML = '';
+            
+            // 模拟API调用延迟
+            setTimeout(() => {
+                // 这里应该是实际的代码验证逻辑
+                // 现在我们只是模拟成功的结果
+                testResultsContainer.innerHTML = '';
+                
+                // 模拟测试结果
+                const testResults = [
+                    { passed: true, input: "5, 3", expected: "8", actual: "8" },
+                    { passed: true, input: "10, 20", expected: "30", actual: "30" },
+                    { passed: true, input: "-5, 5", expected: "0", actual: "0" }
+                ];
+                
+                // 显示测试结果
+                testResults.forEach((test, index) => {
+                    const testResult = document.createElement('div');
+                    testResult.className = `test-result ${test.passed ? 'passed' : 'failed'}`;
+                    testResult.innerHTML = `
+                        <span class="result-icon">${test.passed ? '✓' : '✗'}</span>
+                        测试用例 ${index + 1}: 输入 ${currentProblem.functionName}(${test.input}) → 
+                        期望: ${test.expected}, 实际: ${test.actual}
+                    `;
+                    testResultsContainer.appendChild(testResult);
+                });
+                
+                // 显示总结
+                const allPassed = testResults.every(test => test.passed);
+                summaryContainer.className = allPassed ? 'summary success-summary' : 'summary error-summary';
+                summaryContainer.textContent = allPassed 
+                    ? '恭喜! 您的代码通过了所有测试用例!' 
+                    : '您的代码未能通过所有测试用例，请检查并重试。';
+                
+                // 滚动到结果区域
+                resultSection.scrollIntoView({ behavior: 'smooth' });
+            }, 1500);
+        }
+        
+        // 重置代码
+        function resetCode() {
+            document.getElementById('editor').value = `#include <iostream>
+using namespace std;
+
+// 请在此处编写你的代码
+int ${currentProblem.functionName}(int a, int b) {
+    // 在这里实现函数
+    
+}`;
+        }
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 可以在这里加载更多题目或初始化状态
+        });
+    </script>
+</body>
+</html>
